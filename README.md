@@ -12,6 +12,8 @@ entirely within R where the NBR_with_bash script works in conjunction with the G
 shell scripting, I recommend using the NBR_with_bash script with GDAL_bash_processing, as the raster projection and polygonize functions will
 take seconds on GDAL and hours on R. 
 
+Apart from the satellite data, the only other input file required for these scripts is an existing vegetation layer
+
 The resulting output will include a tif and a shapefile of the burn ratio, of which the shapefile will contain an area calculation to 
 assess, provided a projected coordinate reference system has been used. This can be used to establish the total area each of the severity of
 burns. Also included in the script is a very basic map showing the shapefile output.
