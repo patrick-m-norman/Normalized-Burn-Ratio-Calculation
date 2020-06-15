@@ -14,7 +14,7 @@ library(plyr)
 library(maps)
 library(grid)
 
-
+#Firsly the raster bands need to be imported
 #old NBR
 O_SWIR <- raster('Pre_burn_short_wave_infrared.tiff')
 O_NIR <- raster('Pre_burn_near_infrared.tiff') %>% resample(.,O_SWIR)
@@ -26,16 +26,15 @@ O_NBR <- (O_NIR-O_SWIR)/(O_NIR+O_SWIR)
 N_SWIR <- raster('Post_burn_short_wave_infrared.tiff')
 N_NIR <- raster('Post_burn_near_infrared.tiff') %>% resample(.,N_SWIR)
 
-
 #calculating new normalized burn ratio
 N_NBR <- (N_NIR-N_SWIR)/(N_NIR+N_SWIR)
 
-
-#the difference between the old and the new. This is the output that can be used for 
+#the difference between the old and the new. This is the output that can be used for further analysis.
 Ratio <- O_NBR - N_NBR
+#plotting burn ratio
 plot(Ratio)
 
-#removing the already processed layers out of memory
+#removing the already processed layers out of memory as these files are often quite large
 rm(O_SWIR,O_NIR,O_NBR,N_NIR,N_NBR,N_SWIR)
 
 #reclassify the NBR
@@ -50,7 +49,7 @@ plot(rc)
 writeRaster(rc, 'Burn_ratio.tif', overwrite=TRUE)
 #-------------------------------------------------------------------------------------------------------------------------
 #THIS NEXT PART READS IN A VEGETATION LAYER TO CLIP THEN PROJECTS AND CLIPS THE RASTER, POLYGONIZES IT THEN CLEANS IT.
-#Now read in the vegetation layer and project it to your location in proj4string
+#Now tp read in the vegetation layer and project it to your location using the layers proj4string
 vegetation <- readOGR(".", layer = "vegetation") %>%
   spTransform(., CRS('YOUR_PROJECTED_COORDINATE_SYSTEM'))
 
